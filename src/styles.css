@@ -1,1 +1,29 @@
-/* You can add global styles to this file, and also import other style files */
+/* Estos estilos serán la base visual para el layout, dashboard y pantallas CRUD. */
+
+:root {
+    --mf-sidebar-width: 260px;
+    --mf-navbar-height: 64px;
+}
+
+html,
+body {
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    background-color: #f5f7fb;
+    color: #1f2937;
+}
+
+a {
+    text-decoration: none;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.page-container {
+    padding: 1.5rem;
+}
