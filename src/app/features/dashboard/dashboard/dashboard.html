@@ -1,0 +1,35 @@
+<div class="container py-5">
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+      <h1 class="h4 mb-3">Dashboard MarketFlow</h1>
+
+      <!-- Mostramos información del usuario autenticado -->
+      @if (currentUser$ | async; as user) {
+        <div class="alert alert-success">
+          Sesión iniciada correctamente.
+        </div>
+
+        <p class="mb-1">
+          <strong>Usuario:</strong> {{ user.username }}
+        </p>
+
+        <p class="mb-1">
+          <strong>Email:</strong> {{ user.email }}
+        </p>
+
+        <p class="mb-4">
+          <strong>Roles:</strong> {{ user.roles.join(', ') }}
+        </p>
+      }
+
+      <p class="text-muted">
+        Esta pantalla es temporal. En el siguiente punto construiremos el layout
+        principal con navbar y sidebar.
+      </p>
+
+      <button type="button" class="btn btn-outline-danger" (click)="logout()">
+        Cerrar sesión
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+/**
+ * Fondo visual del login.
+ *
+ * Degradado suave para que la pantalla no se vea plana.
+ */
+.login-page {
+  background:
+    radial-gradient(circle at top left, rgba(13, 110, 253, 0.12), transparent 30%),
+    linear-gradient(135deg, #f5f7fb 0%, #eef2ff 100%);
+}

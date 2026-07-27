@@ -1,14 +1,77 @@
-<div class="container min-vh-100 d-flex align-items-center justify-content-center">
-    <div class="card shadow-sm border-0" style="max-width: 420px; width: 100%;">
-        <div class="card-body p-4">
-            <h1 class="h4 text-center mb-2">MarketFlow</h1>
-            <p class="text-muted text-center mb-4">
-                Frontend Angular.
-            </p>
-
-            <div class="alert alert-info mb-0">
-                Login de prueba
+<!-- Pantalla de login -->
+<div class="login-page min-vh-100 d-flex align-items-center justify-content-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-sm-10 col-md-7 col-lg-5 col-xl-4">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-4">
+            <div class="text-center mb-4">
+              <h1 class="h3 fw-bold mb-1">MarketFlow</h1>
+              <p class="text-muted mb-0">
+                Sistema de inventario y ventas de MiniMarket
+              </p>
             </div>
+
+            <!-- Mensaje de error general del login -->
+            @if (errorMessage) {
+              <div class="alert alert-danger" role="alert">
+                {{ errorMessage }}
+              </div>
+            }
+
+            <!-- Formulario -->
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+              <div class="mb-3">
+                <label for="identifier" class="form-label"> Usuario o Correo: </label>
+
+                <input id="identifier" type="text" class="form-control" formControlName="identifier" placeholder="admin o admin@email.com" [class.is-invalid]="identifier.invalid && identifier.touched"/>
+
+                <!-- Validaciones del campo identifier -->
+                @if (identifier.invalid && identifier.touched) {
+                  <div class="invalid-feedback">
+                    @if (identifier.errors?.['required']) {
+                      El usuario o email es obligatorio.
+                    }
+
+                    @if (identifier.errors?.['minlength']) {
+                      Debe tener al menos 3 caracteres.
+                    }
+                  </div>
+                }
+              </div>
+
+              <div class="mb-3">
+                <label for="password" class="form-label">Contraseña: </label>
+
+                <input id="password" type="password" class="form-control" formControlName="password" placeholder="Ingresa tu contraseña" [class.is-invalid]="password.invalid && password.touched"/>
+
+                <!-- Validaciones del campo password -->
+                @if (password.invalid && password.touched) {
+                  <div class="invalid-feedback">
+                    @if (password.errors?.['required']) {
+                      La contraseña es obligatoria.
+                    }
+
+                    @if (password.errors?.['minlength']) {
+                      Debe tener al menos 6 caracteres.
+                    }
+                  </div>
+                }
+              </div>
+
+              <!-- Botón de login -->
+              <button type="submit" class="btn btn-primary w-100" [disabled]="isLoading">
+                @if (isLoading) {
+                  <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+                  Ingresando...
+                } @else {
+                  Iniciar sesión
+                }
+              </button>
+            </form>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
