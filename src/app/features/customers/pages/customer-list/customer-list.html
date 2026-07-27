@@ -1,0 +1,262 @@
+<!-- Encabezado de página -->
+<div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-4">
+  <div>
+    <h1 class="h4 mb-1">Clientes</h1>
+    <p class="text-muted mb-0">
+      Gestiona los clientes usados en el registro de ventas.
+    </p>
+  </div>
+
+  <div>
+    <a routerLink="/customers/new" class="btn btn-primary">
+      Nuevo cliente
+    </a>
+  </div>
+</div>
+
+<!-- Filtros -->
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-body">
+    <form [formGroup]="filterForm" (ngSubmit)="applyFilters()">
+      <div class="row g-3 align-items-end">
+        <div class="col-12 col-md-6">
+          <label for="search" class="form-label">
+            Buscar
+          </label>
+
+          <input
+            id="search"
+            type="text"
+            class="form-control"
+            placeholder="Nombre, apellido, documento, email o teléfono"
+            formControlName="search"
+          />
+        </div>
+
+        <div class="col-12 col-md-3">
+          <label for="is_active" class="form-label">
+            Estado
+          </label>
+
+          <select
+            id="is_active"
+            class="form-select"
+            formControlName="is_active"
+          >
+            <option value="">Todos</option>
+            <option value="true">Activos</option>
+            <option value="false">Inactivos</option>
+          </select>
+        </div>
+
+        <div class="col-12 col-md-3 d-grid d-md-flex gap-2">
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="isLoading"
+          >
+            Filtrar
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            [disabled]="isLoading"
+            (click)="clearFilters()"
+          >
+            Limpiar
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Mensajes -->
+@if (errorMessage) {
+  <div class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+}
+
+@if (successMessage) {
+  <div class="alert alert-success">
+    {{ successMessage }}
+  </div>
+}
+
+<!-- Loading -->
+@if (isLoading) {
+  <div class="card border-0 shadow-sm">
+    <div class="card-body text-center p-5">
+      <div class="spinner-border text-primary mb-3" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+
+      <p class="text-muted mb-0">Cargando clientes...</p>
+    </div>
+  </div>
+}
+
+<!-- Tabla -->
+@if (!isLoading) {
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+      @if (customers.length > 0) {
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Cliente</th>
+                <th>Documento</th>
+                <th>Contacto</th>
+                <th>Dirección</th>
+                <th>Estado</th>
+                <th>Creado</th>
+                <th class="text-end">Acciones</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (customer of customers; track customer.id) {
+                <tr>
+                  <td>
+                    <div class="fw-semibold">
+                      {{ getCustomerFullName(customer) }}
+                    </div>
+                  </td>
+
+                  <td>
+                    <div>
+                      {{ getDocumentTypeLabel(customer.document_type) }}
+                    </div>
+
+                    <div class="text-muted small">
+                      {{ customer.document_number }}
+                    </div>
+                  </td>
+
+                  <td>
+                    <div>
+                      {{ customer.email || 'Sin email' }}
+                    </div>
+
+                    <div class="text-muted small">
+                      {{ customer.phone || 'Sin teléfono' }}
+                    </div>
+                  </td>
+
+                  <td>
+                    <span class="text-muted">
+                      {{ customer.address || 'Sin dirección' }}
+                    </span>
+                  </td>
+
+                  <td>
+                    @if (customer.is_active) {
+                      <span class="badge text-bg-success">
+                        Activo
+                      </span>
+                    } @else {
+                      <span class="badge text-bg-secondary">
+                        Inactivo
+                      </span>
+                    }
+                  </td>
+
+                  <td>
+                    {{ customer.created_at | date: 'dd/MM/yyyy' }}
+                  </td>
+
+                  <td class="text-end">
+                    <div class="btn-group btn-group-sm">
+                      <a
+                        class="btn btn-outline-primary"
+                        [routerLink]="['/customers', customer.id, 'edit']"
+                      >
+                        Editar
+                      </a>
+
+                      <button
+                        type="button"
+                        class="btn"
+                        [class.btn-outline-danger]="customer.is_active"
+                        [class.btn-outline-success]="!customer.is_active"
+                        [disabled]="actionLoadingId === customer.id"
+                        (click)="toggleCustomerStatus(customer)"
+                      >
+                        @if (actionLoadingId === customer.id) {
+                          ...
+                        } @else {
+                          {{ customer.is_active ? 'Desactivar' : 'Activar' }}
+                        }
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <div class="text-center p-5">
+          <h2 class="h5">No se encontraron clientes</h2>
+          <p class="text-muted mb-0">
+            Intenta cambiar los filtros o registra un nuevo cliente.
+          </p>
+        </div>
+      }
+    </div>
+
+    <!-- Paginación -->
+    @if (meta && meta.totalPages > 1) {
+      <div class="card-footer bg-white">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+          <div class="text-muted small">
+            Mostrando página {{ meta.page }} de {{ meta.totalPages }}.
+            Total: {{ meta.total }} clientes.
+          </div>
+
+          <nav aria-label="Paginación de clientes">
+            <ul class="pagination pagination-sm mb-0">
+              <li class="page-item" [class.disabled]="meta.page === 1">
+                <button
+                  type="button"
+                  class="page-link"
+                  (click)="goToPage(meta.page - 1)"
+                >
+                  Anterior
+                </button>
+              </li>
+
+              @for (page of pages; track page) {
+                <li class="page-item" [class.active]="page === meta.page">
+                  <button
+                    type="button"
+                    class="page-link"
+                    (click)="goToPage(page)"
+                  >
+                    {{ page }}
+                  </button>
+                </li>
+              }
+
+              <li
+                class="page-item"
+                [class.disabled]="meta.page === meta.totalPages"
+              >
+                <button
+                  type="button"
+                  class="page-link"
+                  (click)="goToPage(meta.page + 1)"
+                >
+                  Siguiente
+                </button>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    }
+  </div>
+}

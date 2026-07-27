@@ -1,0 +1,282 @@
+<div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-4">
+  <div>
+    <h1 class="h4 mb-1">
+      {{ isEditMode ? 'Editar cliente' : 'Nuevo cliente' }}
+    </h1>
+
+    <p class="text-muted mb-0">
+      {{ isEditMode
+        ? 'Actualiza los datos del cliente.'
+        : 'Registra un nuevo cliente para usarlo en ventas.'
+      }}
+    </p>
+  </div>
+
+  <div>
+    <a routerLink="/customers" class="btn btn-outline-secondary">
+      Volver
+    </a>
+  </div>
+</div>
+
+@if (errorMessage) {
+  <div class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+}
+
+@if (isLoading) {
+  <div class="card border-0 shadow-sm">
+    <div class="card-body text-center p-5">
+      <div class="spinner-border text-primary mb-3" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+
+      <p class="text-muted mb-0">Cargando cliente...</p>
+    </div>
+  </div>
+} @else {
+  <div class="card border-0 shadow-sm">
+    <div class="card-body">
+      <form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
+        <!-- Documento -->
+        <h2 class="h6 mb-3">Documento</h2>
+
+        <div class="row g-3">
+          <div class="col-12 col-md-4">
+            <label for="document_type" class="form-label">
+              Tipo de documento <span class="text-danger">*</span>
+            </label>
+
+            <select
+              id="document_type"
+              class="form-select"
+              formControlName="document_type"
+              [class.is-invalid]="documentType.invalid && documentType.touched"
+            >
+              @for (type of documentTypes; track type.value) {
+                <option [value]="type.value">
+                  {{ type.label }}
+                </option>
+              }
+            </select>
+
+            @if (documentType.invalid && documentType.touched) {
+              <div class="invalid-feedback">
+                El tipo de documento es obligatorio.
+              </div>
+            }
+          </div>
+
+          <div class="col-12 col-md-8">
+            <label for="document_number" class="form-label">
+              Número de documento <span class="text-danger">*</span>
+            </label>
+
+            <input
+              id="document_number"
+              type="text"
+              class="form-control"
+              placeholder="Ejemplo: 12345678"
+              formControlName="document_number"
+              [class.is-invalid]="documentNumber.invalid && documentNumber.touched"
+            />
+
+            @if (documentNumber.invalid && documentNumber.touched) {
+              <div class="invalid-feedback">
+                @if (documentNumber.errors?.['required']) {
+                  El número de documento es obligatorio.
+                }
+
+                @if (documentNumber.errors?.['minlength']) {
+                  Debe tener al menos 3 caracteres.
+                }
+
+                @if (documentNumber.errors?.['maxlength']) {
+                  No debe tener más de 20 caracteres.
+                }
+              </div>
+            }
+          </div>
+        </div>
+
+        <hr class="my-4" />
+
+        <!-- Datos personales -->
+        <h2 class="h6 mb-3">Datos personales</h2>
+
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <label for="first_name" class="form-label">
+              Nombres <span class="text-danger">*</span>
+            </label>
+
+            <input
+              id="first_name"
+              type="text"
+              class="form-control"
+              placeholder="Ejemplo: Juan"
+              formControlName="first_name"
+              [class.is-invalid]="firstName.invalid && firstName.touched"
+            />
+
+            @if (firstName.invalid && firstName.touched) {
+              <div class="invalid-feedback">
+                @if (firstName.errors?.['required']) {
+                  Los nombres son obligatorios.
+                }
+
+                @if (firstName.errors?.['minlength']) {
+                  Deben tener al menos 2 caracteres.
+                }
+
+                @if (firstName.errors?.['maxlength']) {
+                  No deben tener más de 100 caracteres.
+                }
+              </div>
+            }
+          </div>
+
+          <div class="col-12 col-md-6">
+            <label for="last_name" class="form-label">
+              Apellidos <span class="text-danger">*</span>
+            </label>
+
+            <input
+              id="last_name"
+              type="text"
+              class="form-control"
+              placeholder="Ejemplo: Pérez"
+              formControlName="last_name"
+              [class.is-invalid]="lastName.invalid && lastName.touched"
+            />
+
+            @if (lastName.invalid && lastName.touched) {
+              <div class="invalid-feedback">
+                @if (lastName.errors?.['required']) {
+                  Los apellidos son obligatorios.
+                }
+
+                @if (lastName.errors?.['minlength']) {
+                  Deben tener al menos 2 caracteres.
+                }
+
+                @if (lastName.errors?.['maxlength']) {
+                  No deben tener más de 100 caracteres.
+                }
+              </div>
+            }
+          </div>
+
+          <div class="col-12 col-md-6">
+            <label for="email" class="form-label">
+              Email
+            </label>
+
+            <input
+              id="email"
+              type="email"
+              class="form-control"
+              placeholder="cliente@email.com"
+              formControlName="email"
+              [class.is-invalid]="email.invalid && email.touched"
+            />
+
+            @if (email.invalid && email.touched) {
+              <div class="invalid-feedback">
+                @if (email.errors?.['email']) {
+                  Ingresa un email válido.
+                }
+
+                @if (email.errors?.['maxlength']) {
+                  El email no debe tener más de 150 caracteres.
+                }
+              </div>
+            }
+          </div>
+
+          <div class="col-12 col-md-6">
+            <label for="phone" class="form-label">
+              Teléfono
+            </label>
+
+            <input
+              id="phone"
+              type="text"
+              class="form-control"
+              placeholder="Ejemplo: 999888777"
+              formControlName="phone"
+              [class.is-invalid]="phone.invalid && phone.touched"
+            />
+
+            @if (phone.invalid && phone.touched) {
+              <div class="invalid-feedback">
+                El teléfono no debe tener más de 20 caracteres.
+              </div>
+            }
+          </div>
+
+          <div class="col-12">
+            <label for="address" class="form-label">
+              Dirección
+            </label>
+
+            <textarea
+              id="address"
+              rows="3"
+              class="form-control"
+              placeholder="Dirección opcional del cliente"
+              formControlName="address"
+              [class.is-invalid]="address.invalid && address.touched"
+            ></textarea>
+
+            @if (address.invalid && address.touched) {
+              <div class="invalid-feedback">
+                La dirección no debe tener más de 250 caracteres.
+              </div>
+            }
+          </div>
+
+          <div class="col-12 col-md-4">
+            <label for="is_active" class="form-label">
+              Estado
+            </label>
+
+            <select
+              id="is_active"
+              class="form-select"
+              formControlName="is_active"
+            >
+              <option [ngValue]="true">Activo</option>
+              <option [ngValue]="false">Inactivo</option>
+            </select>
+          </div>
+        </div>
+
+        <hr class="my-4" />
+
+        <div class="d-flex justify-content-end gap-2">
+          <a routerLink="/customers" class="btn btn-outline-secondary">
+            Cancelar
+          </a>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="isSaving"
+          >
+            @if (isSaving) {
+              <span
+                class="spinner-border spinner-border-sm me-2"
+                aria-hidden="true"
+              ></span>
+              Guardando...
+            } @else {
+              {{ isEditMode ? 'Actualizar' : 'Crear' }}
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

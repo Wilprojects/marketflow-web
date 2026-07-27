@@ -230,13 +230,43 @@ export const routes: Routes = [
         {
             path: 'customers',
             canActivate: [roleGuard],
-            loadComponent: () =>
-                import('./shared/components/coming-soon/coming-soon').then((component) => component.ComingSoon,),
-                data: {
-                    roles: [RoleName.ADMIN, RoleName.SELLER],
-                    title: 'Clientes',
-                    description: 'Gestión de clientes del minimarket.',
+            data: {
+                roles: [RoleName.ADMIN, RoleName.SELLER],
+            },
+            children: [
+                /**
+                 * Listado de clientes.
+                 *
+                 * Solo Administrador y Almacenero.
+                 */
+                {
+                    path: '',
+                    loadComponent: () =>
+                        import('./features/customers/pages/customer-list/customer-list').then((component) => component.CustomerList,),
                 },
+
+                /**
+                 * Crear cliente.
+                 *
+                 * Solo Administrador y Almacenero.
+                 */
+                {
+                    path: 'new',
+                    loadComponent: () =>
+                        import('./features/customers/pages/customer-form/customer-form').then((component) => component.CustomerForm,),
+                },
+
+                /**
+                 * Editar cliente.
+                 *
+                 * Solo Administrador y Almacenero.
+                 */
+                {
+                    path: ':id/edit',
+                    loadComponent: () =>
+                        import('./features/customers/pages/customer-form/customer-form').then((component) => component.CustomerForm,),
+                },
+            ],
         },
 
         /**
