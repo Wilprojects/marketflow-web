@@ -1,0 +1,15 @@
+/**
+ * Permite que el textarea crezca verticalmente
+ * sin deformar horizontalmente el formulario.
+ */
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/**
+ * Mejora la lectura de los títulos internos del formulario.
+ */
+h2 {
+  color: #374151;
+}

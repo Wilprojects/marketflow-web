@@ -30,241 +30,277 @@ export const routes: Routes = [
         canActivateChild: [authGuard],
         loadComponent: () =>
             import('./layout/main-layout/main-layout').then((component) => component.MainLayout),
-            children: [
-                {
-                    path: '',
-                    redirectTo: 'dashboard',
-                    pathMatch: 'full',
-                },
-                {
-                    path: 'dashboard',
-                    loadComponent: () =>
-                        import('./features/dashboard/dashboard/dashboard').then((component) => component.Dashboard),
-                },
-
-                /**
-                 * Módulos de gestión.
-                 * Por ahora apuntan a ComingSoon.
-                 */
-                {
-                    path: 'products',
-                    loadComponent: () =>
-                        import('./shared/components/coming-soon/coming-soon').then((component) => component.ComingSoon),
-                        data: {
-                            title: 'Productos',
-                            description: 'Gestión de productos, stock, precios y bajo stock.',
-                        },
-                },
-                {
-                    path: 'categories',
-                    children: [
-                        
-                        /**
-                         * Listado de categorías.
-                         *
-                         * Cualquier usuario autenticado puede listar categorías.
-                         */
-                        {
-                            path: '',
-                            loadComponent: () =>
-                                import('./features/categories/pages/category-list/category-list').then((component) => component.CategoryList,),
-                        },
-
-                        /**
-                         * Crear categoría.
-                         *
-                         * Solo Administrador y Almacenero.
-                         */
-                        {
-                            path: 'new',
-                            canActivate: [roleGuard],
-                            loadComponent: () =>
-                                import('./features/categories/pages/category-form/category-form').then((component) => component.CategoryForm,),
-                            data: {
-                                roles: [RoleName.ADMIN, RoleName.WAREHOUSE],
-                            },
-                        },
-
-                        /**
-                         * Editar categoría.
-                         *
-                         * Solo Administrador y Almacenero.
-                         */
-                        {
-                            path: ':id/edit',
-                            canActivate: [roleGuard],
-                            loadComponent: () =>
-                                import('./features/categories/pages/category-form/category-form').then((component) => component.CategoryForm,),
-                            data: {
-                                roles: [RoleName.ADMIN, RoleName.WAREHOUSE],
-                            },
-                        },
-                    ],
-                },
-                {
-                    path: 'brands',
-                    children: [
-                        /**
-                         * Listado de marcas.
-                         *
-                         * Cualquier usuario autenticado puede listar marcas.
-                         */
-                        {
-                            path: '',
-                            loadComponent: () =>
-                                import('./features/brands/pages/brand-list/brand-list').then((component) => component.BrandList,),
-                        },
-
-                        /**
-                         * Crear marca.
-                         *
-                         * Solo Administrador y Almacenero.
-                         */
-                        {
-                            path: 'new',
-                            canActivate: [roleGuard],
-                            loadComponent: () =>
-                                import('./features/brands/pages/brand-form/brand-form').then((component) => component.BrandForm,),
-                            data: {
-                                roles: [RoleName.ADMIN, RoleName.WAREHOUSE],
-                            },
-                        },
-
-                        /**
-                         * Editar marca.
-                         *
-                         * Solo Administrador y Vendedor.
-                         */
-                        {
-                            path: ':id/edit',
-                            canActivate: [roleGuard],
-                            loadComponent: () =>
-                                import('./features/brands/pages/brand-form/brand-form').then((component) => component.BrandForm,),
-                            data: {
-                                roles: [RoleName.ADMIN, RoleName.WAREHOUSE],
-                            },
-                        },
-                    ],
-                },
-
-                /**
-                 * Ventas: Administrador y Vendedor.
-                 */
-                {
-                    path: 'sales',
-                    canActivate: [roleGuard],
-                    loadComponent: () =>
-                        import('./shared/components/coming-soon/coming-soon').then((component) => component.ComingSoon),
-                        data: {
-                            roles: [RoleName.ADMIN, RoleName.SELLER],
-                            title: 'Ventas',
-                            description: 'Registro, consulta y cancelación de ventas.',
-                        },
-                },
-
-                /**
-                 * Compras e inventario: Administrador y Almacenero.
-                 */
-                {
-                    path: 'purchases',
-                    canActivate: [roleGuard],
-                    loadComponent: () =>
-                        import('./shared/components/coming-soon/coming-soon').then((component) => component.ComingSoon),
-                        data: {
-                            roles: [RoleName.ADMIN, RoleName.WAREHOUSE],
-                            title: 'Compras',
-                            description: 'Registro, consulta y cancelación de compras.',
-                        },
-                },
-                {
-                    path: 'inventory-movements',
-                    canActivate: [roleGuard],
-                    loadComponent: () =>
-                        import('./shared/components/coming-soon/coming-soon').then((component) => component.ComingSoon),
-                        data: {
-                            roles: [RoleName.ADMIN, RoleName.WAREHOUSE],
-                            title: 'Movimientos de inventario',
-                            description: 'Entradas, salidas, ajustes e historial de stock.',
-                        },
+        children: [
+            {
+                path: '',
+                redirectTo: 'dashboard',
+                pathMatch: 'full',
+            },
+            {
+                path: 'dashboard',
+                loadComponent: () =>
+                    import('./features/dashboard/dashboard/dashboard').then((component) => component.Dashboard),
             },
 
             /**
-             * Clientes: Adminsitrador y Vendedor.
+             * Módulos de gestión.
+             * Por ahora apuntan a ComingSoon.
              */
             {
-                path: 'customers',
+                path: 'products',
+                children: [
+                    /**
+                     * Listado de productos.
+                     *
+                     * Cualquier usuario autenticado puede listar productos.
+                     */
+                    {
+                        path: '',
+                        loadComponent: () =>
+                            import('./features/products/pages/product-list/product-list').then((component) => component.ProductList,),
+                    },
+
+                    /**
+                     * Crear producto.
+                     *
+                     * Solo Administrador y Almacenero.
+                     */
+                    {
+                        path: 'new',
+                        canActivate: [roleGuard],
+                        loadComponent: () =>
+                            import('./features/products/pages/product-form/product-form').then((component) => component.ProductForm,),
+                        data: {
+                            roles: [RoleName.ADMIN, RoleName.WAREHOUSE],
+                        },
+                    },
+
+                    /**
+                     * Editar producto.
+                     *
+                     * Solo Administrador y Almacenero.
+                     */
+                    {
+                        path: ':id/edit',
+                        canActivate: [roleGuard],
+                        loadComponent: () =>
+                            import('./features/products/pages/product-form/product-form').then((component) => component.ProductForm,),
+                        data: {
+                            roles: [RoleName.ADMIN, RoleName.WAREHOUSE],
+                        },
+                    },
+                ],
+            },
+            {
+                path: 'categories',
+                children: [
+                    
+                    /**
+                     * Listado de categorías.
+                     *
+                     * Cualquier usuario autenticado puede listar categorías.
+                     */
+                    {
+                        path: '',
+                        loadComponent: () =>
+                            import('./features/categories/pages/category-list/category-list').then((component) => component.CategoryList,),
+                    },
+
+                    /**
+                     * Crear categoría.
+                     *
+                     * Solo Administrador y Almacenero.
+                     */
+                    {
+                        path: 'new',
+                        canActivate: [roleGuard],
+                        loadComponent: () =>
+                            import('./features/categories/pages/category-form/category-form').then((component) => component.CategoryForm,),
+                        data: {
+                            roles: [RoleName.ADMIN, RoleName.WAREHOUSE],
+                        },
+                    },
+
+                    /**
+                     * Editar categoría.
+                     *
+                     * Solo Administrador y Almacenero.
+                     */
+                    {
+                        path: ':id/edit',
+                        canActivate: [roleGuard],
+                        loadComponent: () =>
+                            import('./features/categories/pages/category-form/category-form').then((component) => component.CategoryForm,),
+                        data: {
+                            roles: [RoleName.ADMIN, RoleName.WAREHOUSE],
+                        },
+                    },
+                ],
+            },
+            {
+                path: 'brands',
+                children: [
+                    /**
+                     * Listado de marcas.
+                     *
+                     * Cualquier usuario autenticado puede listar marcas.
+                     */
+                    {
+                        path: '',
+                        loadComponent: () =>
+                            import('./features/brands/pages/brand-list/brand-list').then((component) => component.BrandList,),
+                    },
+
+                    /**
+                     * Crear marca.
+                     *
+                     * Solo Administrador y Almacenero.
+                     */
+                    {
+                        path: 'new',
+                        canActivate: [roleGuard],
+                        loadComponent: () =>
+                            import('./features/brands/pages/brand-form/brand-form').then((component) => component.BrandForm,),
+                        data: {
+                            roles: [RoleName.ADMIN, RoleName.WAREHOUSE],
+                        },
+                    },
+
+                    /**
+                     * Editar marca.
+                     *
+                     * Solo Administrador y Vendedor.
+                     */
+                    {
+                        path: ':id/edit',
+                        canActivate: [roleGuard],
+                        loadComponent: () =>
+                            import('./features/brands/pages/brand-form/brand-form').then((component) => component.BrandForm,),
+                        data: {
+                            roles: [RoleName.ADMIN, RoleName.WAREHOUSE],
+                        },
+                    },
+                ],
+            },
+
+            /**
+             * Ventas: Administrador y Vendedor.
+             */
+            {
+                path: 'sales',
                 canActivate: [roleGuard],
                 loadComponent: () =>
-                    import('./shared/components/coming-soon/coming-soon').then((component) => component.ComingSoon,),
+                    import('./shared/components/coming-soon/coming-soon').then((component) => component.ComingSoon),
                     data: {
                         roles: [RoleName.ADMIN, RoleName.SELLER],
-                        title: 'Clientes',
-                        description: 'Gestión de clientes del minimarket.',
+                        title: 'Ventas',
+                        description: 'Registro, consulta y cancelación de ventas.',
                     },
             },
 
             /**
-             * Proveedores: Administrador y Vendedor.
+             * Compras e inventario: Administrador y Almacenero.
              */
             {
-                path: 'suppliers',
+                path: 'purchases',
                 canActivate: [roleGuard],
                 loadComponent: () =>
                     import('./shared/components/coming-soon/coming-soon').then((component) => component.ComingSoon),
                     data: {
                         roles: [RoleName.ADMIN, RoleName.WAREHOUSE],
-                        title: 'Proveedores',
-                        description: 'Gestión de proveedores para compras.',
-                    },
-            },
-
-            /**
-             * Reportes y adjuntos.
-             */
-            {
-                path: 'reports',
-                loadComponent: () =>
-                    import('./shared/components/coming-soon/coming-soon').then((component) => component.ComingSoon,),
-                    data: {
-                        title: 'Reportes',
-                        description: 'Indicadores de ventas, inventario y productos.',
+                        title: 'Compras',
+                        description: 'Registro, consulta y cancelación de compras.',
                     },
             },
             {
-                path: 'attachments',
+                path: 'inventory-movements',
+                canActivate: [roleGuard],
                 loadComponent: () =>
                     import('./shared/components/coming-soon/coming-soon').then((component) => component.ComingSoon),
                     data: {
-                        title: 'Archivos adjuntos',
-                        description: 'Gestión de comprobantes, documentos e imágenes.',
+                        roles: [RoleName.ADMIN, RoleName.WAREHOUSE],
+                        title: 'Movimientos de inventario',
+                        description: 'Entradas, salidas, ajustes e historial de stock.',
                     },
-            },
+        },
 
-            /**
-             * Usuarios y roles: solo Administrador.
-             */
-            {
-                path: 'users',
-                canActivate: [roleGuard],
-                loadComponent: () =>
-                    import('./shared/components/coming-soon/coming-soon').then((component) => component.ComingSoon,),
-                    data: {
-                        roles: [RoleName.ADMIN],
-                        title: 'Usuarios',
-                        description: 'Administración de usuarios del sistema.',
-                    },
-            },
-            {
-                path: 'roles',
-                canActivate: [roleGuard],
-                loadComponent: () =>
-                    import('./shared/components/coming-soon/coming-soon').then((component) => component.ComingSoon,),
-                    data: {
-                        roles: [RoleName.ADMIN],
-                        title: 'Roles',
-                        description: 'Consulta de roles disponibles en MarketFlow.',
-                    },
-            },
+        /**
+         * Clientes: Adminsitrador y Vendedor.
+         */
+        {
+            path: 'customers',
+            canActivate: [roleGuard],
+            loadComponent: () =>
+                import('./shared/components/coming-soon/coming-soon').then((component) => component.ComingSoon,),
+                data: {
+                    roles: [RoleName.ADMIN, RoleName.SELLER],
+                    title: 'Clientes',
+                    description: 'Gestión de clientes del minimarket.',
+                },
+        },
+
+        /**
+         * Proveedores: Administrador y Vendedor.
+         */
+        {
+            path: 'suppliers',
+            canActivate: [roleGuard],
+            loadComponent: () =>
+                import('./shared/components/coming-soon/coming-soon').then((component) => component.ComingSoon),
+                data: {
+                    roles: [RoleName.ADMIN, RoleName.WAREHOUSE],
+                    title: 'Proveedores',
+                    description: 'Gestión de proveedores para compras.',
+                },
+        },
+
+        /**
+         * Reportes y adjuntos.
+         */
+        {
+            path: 'reports',
+            loadComponent: () =>
+                import('./shared/components/coming-soon/coming-soon').then((component) => component.ComingSoon,),
+                data: {
+                    title: 'Reportes',
+                    description: 'Indicadores de ventas, inventario y productos.',
+                },
+        },
+        {
+            path: 'attachments',
+            loadComponent: () =>
+                import('./shared/components/coming-soon/coming-soon').then((component) => component.ComingSoon),
+                data: {
+                    title: 'Archivos adjuntos',
+                    description: 'Gestión de comprobantes, documentos e imágenes.',
+                },
+        },
+
+        /**
+         * Usuarios y roles: solo Administrador.
+         */
+        {
+            path: 'users',
+            canActivate: [roleGuard],
+            loadComponent: () =>
+                import('./shared/components/coming-soon/coming-soon').then((component) => component.ComingSoon,),
+                data: {
+                    roles: [RoleName.ADMIN],
+                    title: 'Usuarios',
+                    description: 'Administración de usuarios del sistema.',
+                },
+        },
+        {
+            path: 'roles',
+            canActivate: [roleGuard],
+            loadComponent: () =>
+                import('./shared/components/coming-soon/coming-soon').then((component) => component.ComingSoon,),
+                data: {
+                    roles: [RoleName.ADMIN],
+                    title: 'Roles',
+                    description: 'Consulta de roles disponibles en MarketFlow.',
+                },
+        },
         ],
     },
 
