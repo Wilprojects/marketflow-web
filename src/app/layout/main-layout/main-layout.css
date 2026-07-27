@@ -1,0 +1,76 @@
+/**
+ * Layout general.
+ *
+ * En escritorio usamos flex:
+ * sidebar a la izquierda y contenido a la derecha.
+ */
+.mf-layout {
+  min-height: 100vh;
+  display: flex;
+  background-color: #f5f7fb;
+}
+
+/**
+ * Sidebar en escritorio.
+ */
+.mf-sidebar {
+  width: var(--mf-sidebar-width);
+  flex: 0 0 var(--mf-sidebar-width);
+}
+
+/**
+ * Área de contenido.
+ */
+.mf-content {
+  flex: 1;
+  min-width: 0;
+}
+
+/**
+ * Contenido interno debajo del navbar.
+ */
+.mf-main {
+  padding: 1.5rem;
+}
+
+/**
+ * Backdrop solo para móvil.
+ */
+.mf-mobile-backdrop {
+  display: none;
+}
+
+/**
+ * Responsive: sidebar oculto en pantallas pequeñas.
+ */
+@media (max-width: 991.98px) {
+  .mf-layout {
+    display: block;
+  }
+
+  .mf-sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1040;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease-in-out;
+  }
+
+  .mf-sidebar.is-open {
+    transform: translateX(0);
+  }
+
+  .mf-mobile-backdrop.show {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 1030;
+    background-color: rgba(15, 23, 42, 0.45);
+  }
+
+  .mf-main {
+    padding: 1rem;
+  }
+}

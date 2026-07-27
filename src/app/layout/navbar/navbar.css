@@ -1,0 +1,11 @@
+/**
+ * Navbar superior.
+ *
+ * Se mantiene arriba mientras el usuario navega.
+ */
+.mf-navbar {
+  min-height: var(--mf-navbar-height);
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+}

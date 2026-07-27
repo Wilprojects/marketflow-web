@@ -1,0 +1,26 @@
+<nav class="mf-navbar navbar navbar-expand bg-white border-bottom shadow-sm">
+  <div class="container-fluid">
+    <!-- Botón visible solo en pantallas pequeñas -->
+    <button type="button" class="btn btn-outline-secondary d-lg-none me-2" (click)="onToggleSidebar()" aria-label="Abrir menú">☰</button>
+
+    <span class="navbar-brand mb-0 h1 fw-bold text-primary"> MarketFlow </span>
+
+    <div class="ms-auto d-flex align-items-center gap-3">
+      @if (currentUser$ | async; as user) {
+        <div class="text-end d-none d-sm-block">
+          <div class="fw-semibold small">
+            {{ getUserDisplayName(user) }}
+          </div>
+
+          <div class="text-muted small">
+            {{ user.roles.join(', ') }}
+          </div>
+        </div>
+      }
+
+      <button type="button" class="btn btn-outline-danger btn-sm" (click)="logout()">
+        Cerrar sesión
+      </button>
+    </div>
+  </div>
+</nav>

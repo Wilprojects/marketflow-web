@@ -1,0 +1,17 @@
+<div class="mf-layout">
+  <!-- Fondo oscuro para cerrar el sidebar en móvil -->
+  <div class="mf-mobile-backdrop"[class.show]="isMobileSidebarOpen" (click)="closeMobileSidebar()"></div>
+
+  <!-- Sidebar lateral -->
+  <app-sidebar class="mf-sidebar" [class.is-open]="isMobileSidebarOpen" (closeSidebar)="closeMobileSidebar()"></app-sidebar>
+
+  <!-- Contenido principal -->
+  <div class="mf-content">
+    <app-navbar (sidebarToggle)="toggleMobileSidebar()"></app-navbar>
+
+    <main class="mf-main">
+      <!-- Aquí se renderizan dashboard, productos, ventas, compras, etc. -->
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

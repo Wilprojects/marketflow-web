@@ -4,15 +4,10 @@ import { AuthService } from '../../../core/services/auth.service';
 import { SessionService } from '../../../core/services/session.service';
 
 /**
- * Dashboard temporal.
+ * Dashboard temporal dentro del layout principal.
  *
- * Este componente se usará solo para comprobar que:
- * - el login funciona
- * - la sesión se guarda
- * - el usuario autenticado se puede leer
- * - el logout funciona
- *
- * Será reemplazado por el dashboard real.
+ * Más adelante este componente consumirá:
+ * GET /reports/dashboard
  */
 @Component({
   selector: 'app-dashboard',
@@ -31,10 +26,4 @@ export class Dashboard {
    */
   readonly currentUser$ = this.sessionService.currentUser$;
 
-  /**
-   * Cierra sesión.
-   */
-  logout(): void {
-    this.authService.logout();
-  }
 }

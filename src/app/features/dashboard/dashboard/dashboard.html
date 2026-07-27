@@ -1,35 +1,45 @@
-<div class="container py-5">
-  <div class="card border-0 shadow-sm">
-    <div class="card-body p-4">
-      <h1 class="h4 mb-3">Dashboard MarketFlow</h1>
+<div class="row g-3 mb-4">
+  <div class="col-12">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body p-4">
+        <h1 class="h4 mb-2">Dashboard MarketFlow</h1>
 
-      <!-- Mostramos información del usuario autenticado -->
-      @if (currentUser$ | async; as user) {
-        <div class="alert alert-success">
-          Sesión iniciada correctamente.
-        </div>
+        @if (currentUser$ | async; as user) {
+          <p class="text-muted mb-0">
+            Bienvenido, <strong>{{ user.username }}</strong>.
+            Roles: <strong>{{ user.roles.join(', ') }}</strong>
+          </p>
+        }
+      </div>
+    </div>
+  </div>
+</div>
 
-        <p class="mb-1">
-          <strong>Usuario:</strong> {{ user.username }}
-        </p>
+<div class="row g-3">
+  <div class="col-12 col-md-4">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body">
+        <div class="text-muted small">Ventas</div>
+        <div class="h4 mb-0">Pendiente</div>
+      </div>
+    </div>
+  </div>
 
-        <p class="mb-1">
-          <strong>Email:</strong> {{ user.email }}
-        </p>
+  <div class="col-12 col-md-4">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body">
+        <div class="text-muted small">Productos bajo stock</div>
+        <div class="h4 mb-0">Pendiente</div>
+      </div>
+    </div>
+  </div>
 
-        <p class="mb-4">
-          <strong>Roles:</strong> {{ user.roles.join(', ') }}
-        </p>
-      }
-
-      <p class="text-muted">
-        Esta pantalla es temporal. En el siguiente punto construiremos el layout
-        principal con navbar y sidebar.
-      </p>
-
-      <button type="button" class="btn btn-outline-danger" (click)="logout()">
-        Cerrar sesión
-      </button>
+  <div class="col-12 col-md-4">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body">
+        <div class="text-muted small">Movimientos</div>
+        <div class="h4 mb-0">Pendiente</div>
+      </div>
     </div>
   </div>
 </div>

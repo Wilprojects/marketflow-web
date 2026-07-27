@@ -1,0 +1,32 @@
+<aside class="mf-sidebar-panel">
+  <div class="mf-sidebar-header">
+    <div>
+      <h2 class="h5 mb-0">MarketFlow</h2>
+      <small class="text-white-50">Minimarket</small>
+    </div>
+
+    <!-- Botón visible en móvil para cerrar el menú -->
+    <button type="button" class="btn btn-sm btn-outline-light d-lg-none" (click)="closeSidebar.emit()" aria-label="Cerrar menú"> ✕ </button>
+  </div>
+
+  <div class="mf-sidebar-body">
+    @if (currentUser$ | async; as user) {
+      @for (group of menuGroups; track group.title) {
+        <div class="mf-menu-group">
+          <div class="mf-menu-title">
+            {{ group.title }}
+          </div>
+
+          @for (item of group.items; track item.route) {
+            @if (canShowItem(item, user)) {
+              <a class="mf-sidebar-link" [routerLink]="item.route" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"(click)="onNavigate()">
+                <span class="mf-sidebar-icon">{{ item.icon }}</span>
+                <span>{{ item.label }}</span>
+              </a>
+            }
+          }
+        </div>
+      }
+    }
+  </div>
+</aside>
