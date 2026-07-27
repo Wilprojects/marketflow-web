@@ -57,12 +57,49 @@ export const routes: Routes = [
                 },
                 {
                     path: 'categories',
-                    loadComponent: () =>
-                        import('./shared/components/coming-soon/coming-soon').then((component) => component.ComingSoon),
-                        data: {
-                            title: 'Categorías',
-                            description: 'Gestión de categorías de productos.',
+                    children: [
+                        
+                        /**
+                         * Listado de categorías.
+                         *
+                         * Cualquier usuario autenticado puede listar categorías.
+                         */
+                        {
+                            path: '',
+                            loadComponent: () =>
+                                import('./features/categories/pages/category-list/category-list').then((component) => component.CategoryList,),
                         },
+
+                        /**
+                         * Crear categoría.
+                         *
+                         * Solo Administrador y Almacenero.
+                         */
+                        {
+                            path: 'new',
+                            canActivate: [roleGuard],
+                            loadComponent: () =>
+                                import('./features/categories/pages/category-form/category-form').then((component) => component.CategoryForm,),
+                            data: {
+                                roles: [RoleName.ADMIN, RoleName.WAREHOUSE],
+                            },
+                        },
+
+                        /**
+                         * Editar categoría.
+                         *
+                         * Solo Administrador y Almacenero.
+                         */
+                        {
+                            path: ':id/edit',
+                            canActivate: [roleGuard],
+                            loadComponent: () =>
+                                import('./features/categories/pages/category-form/category-form').then((component) => component.CategoryForm,),
+                            data: {
+                                roles: [RoleName.ADMIN, RoleName.WAREHOUSE],
+                            },
+                        },
+                    ],
                 },
                 {
                     path: 'brands',

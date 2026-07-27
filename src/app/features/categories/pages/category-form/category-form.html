@@ -1,0 +1,139 @@
+<div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-4">
+  <div>
+    <h1 class="h4 mb-1">
+      {{ isEditMode ? 'Editar categoría' : 'Nueva categoría' }}
+    </h1>
+
+    <p class="text-muted mb-0">
+      {{ isEditMode
+        ? 'Actualiza los datos de la categoría.'
+        : 'Registra una nueva categoría para clasificar productos.'
+      }}
+    </p>
+  </div>
+
+  <div>
+    <a routerLink="/categories" class="btn btn-outline-secondary">
+      Volver
+    </a>
+  </div>
+</div>
+
+@if (errorMessage) {
+  <div class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+}
+
+@if (isLoading) {
+  <div class="card border-0 shadow-sm">
+    <div class="card-body text-center p-5">
+      <div class="spinner-border text-primary mb-3" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+
+      <p class="text-muted mb-0">Cargando categoría...</p>
+    </div>
+  </div>
+} @else {
+  <div class="card border-0 shadow-sm">
+    <div class="card-body">
+      <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+        <div class="row g-3">
+          <div class="col-12 col-lg-8">
+            <label for="name" class="form-label">
+              Nombre <span class="text-danger">*</span>
+            </label>
+
+            <input
+              id="name"
+              type="text"
+              class="form-control"
+              placeholder="Ejemplo: Bebidas"
+              formControlName="name"
+              [class.is-invalid]="name.invalid && name.touched"
+            />
+
+            @if (name.invalid && name.touched) {
+              <div class="invalid-feedback">
+                @if (name.errors?.['required']) {
+                  El nombre es obligatorio.
+                }
+
+                @if (name.errors?.['minlength']) {
+                  El nombre debe tener al menos 2 caracteres.
+                }
+
+                @if (name.errors?.['maxlength']) {
+                  El nombre no debe tener más de 100 caracteres.
+                }
+              </div>
+            }
+          </div>
+
+          <div class="col-12 col-lg-4">
+            <label for="is_active" class="form-label">
+              Estado
+            </label>
+
+            <select
+              id="is_active"
+              class="form-select"
+              formControlName="is_active"
+            >
+              <option [ngValue]="true">Activa</option>
+              <option [ngValue]="false">Inactiva</option>
+            </select>
+          </div>
+
+          <div class="col-12">
+            <label for="description" class="form-label">
+              Descripción
+            </label>
+
+            <textarea
+              id="description"
+              rows="4"
+              class="form-control"
+              placeholder="Descripción opcional"
+              formControlName="description"
+              [class.is-invalid]="description.invalid && description.touched"
+            ></textarea>
+
+            @if (description.invalid && description.touched) {
+              <div class="invalid-feedback">
+                @if (description.errors?.['maxlength']) {
+                  La descripción no debe tener más de 250 caracteres.
+                }
+              </div>
+            }
+          </div>
+        </div>
+
+        <hr class="my-4" />
+
+        <div class="d-flex justify-content-end gap-2">
+          <a routerLink="/categories" class="btn btn-outline-secondary">
+            Cancelar
+          </a>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="isSaving"
+          >
+            @if (isSaving) {
+              <span
+                class="spinner-border spinner-border-sm me-2"
+                aria-hidden="true"
+              ></span>
+              Guardando...
+            } @else {
+              {{ isEditMode ? 'Actualizar' : 'Crear' }}
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

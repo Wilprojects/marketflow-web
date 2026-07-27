@@ -1,0 +1,7 @@
+/**
+ * Permite que el textarea no sea demasiado pequeño.
+ */
+textarea {
+  resize: vertical;
+  min-height: 120px;
+}
