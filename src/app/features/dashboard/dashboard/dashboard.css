@@ -1,0 +1,49 @@
+/**
+ * Filtro superior del dashboard.
+ *
+ * Le damos un ancho máximo para que no ocupe toda la pantalla
+ * en escritorio, pero en móvil ocupa el ancho disponible.
+ */
+.dashboard-filter {
+  width: 100%;
+  max-width: 520px;
+}
+
+/**
+ * Cards de indicadores principales.
+ */
+.dashboard-card {
+  min-height: 120px;
+}
+
+/**
+ * Fila reutilizable para mostrar label + valor.
+ *
+ * Se usa en:
+ * - resumen de ventas
+ * - métodos de pago
+ * - inventario
+ */
+.dashboard-summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.55rem 0;
+}
+
+/**
+ * Agrega separación visual entre filas consecutivas.
+ */
+.dashboard-summary-row + .dashboard-summary-row {
+  border-top: 1px solid #eef2f7;
+}
+
+/**
+ * Ajuste responsive para el formulario de filtros.
+ */
+@media (max-width: 991.98px) {
+  .dashboard-filter {
+    max-width: none;
+  }
+}
