@@ -103,12 +103,48 @@ export const routes: Routes = [
                 },
                 {
                     path: 'brands',
-                    loadComponent: () =>
-                        import('./shared/components/coming-soon/coming-soon').then((component) => component.ComingSoon),
-                        data: {
-                            title: 'Marcas',
-                            description: 'Gestión de marcas de productos.',
+                    children: [
+                        /**
+                         * Listado de marcas.
+                         *
+                         * Cualquier usuario autenticado puede listar marcas.
+                         */
+                        {
+                            path: '',
+                            loadComponent: () =>
+                                import('./features/brands/pages/brand-list/brand-list').then((component) => component.BrandList,),
                         },
+
+                        /**
+                         * Crear marca.
+                         *
+                         * Solo Administrador y Almacenero.
+                         */
+                        {
+                            path: 'new',
+                            canActivate: [roleGuard],
+                            loadComponent: () =>
+                                import('./features/brands/pages/brand-form/brand-form').then((component) => component.BrandForm,),
+                            data: {
+                                roles: [RoleName.ADMIN, RoleName.WAREHOUSE],
+                            },
+                        },
+
+                        /**
+                         * Editar marca.
+                         *
+                         * Solo Administrador y Vendedor.
+                         */
+                        {
+                            path: ':id/edit',
+                            canActivate: [roleGuard],
+                            loadComponent: () =>
+                                import('./features/brands/pages/brand-form/brand-form').then((component) => component.BrandForm,),
+                            data: {
+                                roles: [RoleName.ADMIN, RoleName.WAREHOUSE],
+                            },
+                        },
+                    ],
                 },
 
                 /**

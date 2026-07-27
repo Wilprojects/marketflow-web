@@ -1,0 +1,17 @@
+/**
+ * Evita que los botones de acciones se rompan visualmente.
+ */
+.btn-group .btn {
+  white-space: nowrap;
+}
+
+/**
+ * Mejora la visualización de acciones en pantallas pequeñas.
+ */
+@media (max-width: 767.98px) {
+  .btn-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+}

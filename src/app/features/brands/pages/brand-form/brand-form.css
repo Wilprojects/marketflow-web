@@ -1,0 +1,8 @@
+/**
+ * Permite que el textarea pueda crecer verticalmente
+ * sin deformar el formulario horizontalmente.
+ */
+textarea {
+  resize: vertical;
+  min-height: 120px;
+}
